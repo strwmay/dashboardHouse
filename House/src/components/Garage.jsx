@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import mqtt from "mqtt";
 
-export default function Garage() {
+export default function Garage({ darkMode }) {
   const [client, setClient] = useState(null);
   const [socialDoorState, setSocialDoorState] = useState("Fechada");
   const [basculanteDoorState, setBasculanteDoorState] = useState("Fechada");
@@ -36,10 +36,10 @@ export default function Garage() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Garagem</h1>
+      <h1 className="text-center mb-4">Garagem🚙</h1>
       <div className="row justify-content-center">
         <div className="col-md-4">
-          <div className="card text-center shadow-lg p-3 mb-5 bg-light rounded">
+          <div className={`card text-center shadow-lg p-3 mb-5 rounded ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}>
             <div className="card-body">
               <h5 className="card-title">Controles</h5>
               <div className="mb-3">

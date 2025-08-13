@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import mqtt from "mqtt";
 
-export default function Bedroom() {
+export default function Bedroom({ darkMode }) {
   const [client, setClient] = useState(null);
   const [lightState, setLightState] = useState(false);
   const [socketState, setSocketState] = useState(false);
@@ -34,41 +34,26 @@ export default function Bedroom() {
   }, []);
 
   // Funções de controle
-  const toggleLight = () => {
-    if (!client) return;
-    client.publish("quarto/luz", lightState ? "OFF" : "ON");
-  };
-
-  const toggleSocket = () => {
-    if (!client) return;
-    client.publish("quarto/tomada", socketState ? "OFF" : "ON");
-  };
-
-  const controlCurtain = (action) => {
-    if (!client) return;
-    client.publish("quarto/cortina", action);
-  };
+  const toggleLight = () => client && client.publish("quarto/luz", lightState ? "OFF" : "ON");
+  const toggleSocket = () => client && client.publish("quarto/tomada", socketState ? "OFF" : "ON");
+  const controlCurtain = (action) => client && client.publish("quarto/cortina", action);
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Quarto</h1>
+      <h1 className="text-center mb-4">🛏️Quarto</h1>
       <div className="row justify-content-center">
         <div className="col-md-4">
-          <div className="card text-center shadow-lg p-3 mb-5 bg-light rounded">
+          <div className={`card text-center shadow-lg p-3 mb-5 rounded ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}>
             <div className="card-body">
               <h5 className="card-title">Controles</h5>
               <button
-                className={`btn ${
-                  lightState ? "btn-success" : "btn-secondary"
-                } m-2`}
+                className={`btn ${lightState ? "btn-success" : "btn-secondary"} m-2`}
                 onClick={toggleLight}
               >
                 Luz Quarto {lightState ? "Ligada" : "Desligada"}
               </button>
               <button
-                className={`btn ${
-                  socketState ? "btn-success" : "btn-secondary"
-                } m-2`}
+                className={`btn ${socketState ? "btn-success" : "btn-secondary"} m-2`}
                 onClick={toggleSocket}
               >
                 Tomada {socketState ? "Ligada" : "Desligada"}

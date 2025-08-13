@@ -16,6 +16,16 @@
   flex: 1; /* Permitir que os cards tenham tamanhos consistentes */
   display: flex;
   flex-direction: column; /* Garantir que o conteúdo interno seja organizado */
+  border: 2px solid #ccc;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.card.bg-dark {
+  border-color: #444;
+}
+
+.card.bg-light {
+  border-color: #ddd;
 }
 
 .card-body {
