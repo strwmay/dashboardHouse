@@ -43,29 +43,49 @@ export default function LivingRoom() {
     return () => mqttClient.end();
   }, []);
 
-  // Publicadores
   const toggleLed = () => client && client.publish("jml/sala/led", ledState ? "OFF" : "ON");
   const toggleAr = () => client && client.publish("jml/sala/ar", arState ? "OFF" : "ON");
   const toggleUmid = () => client && client.publish("jml/sala/umid", umidState ? "OFF" : "ON");
 
   return (
-    <div className="container">
-      <h2>Living Room</h2>
-
-      <p>Temperatura: {temperatura}°C</p>
-      <p>Umidade: {umidade}%</p>
-
-      <button onClick={toggleLed}>
-        {ledState ? "Desligar Luz" : "Ligar Luz"}
-      </button>
-
-      <button onClick={toggleAr}>
-        {arState ? "Desligar Ar" : "Ligar Ar"}
-      </button>
-
-      <button onClick={toggleUmid}>
-        {umidState ? "Desligar Umidificador" : "Ligar Umidificador"}
-      </button>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Sala</h1>
+      <div className="row justify-content-center">
+        <div className="col-md-4">
+          <div className="card text-center shadow-lg p-3 mb-5 bg-light rounded">
+            <div className="card-body">
+              <h5 className="card-title">Controles</h5>
+              <button
+                className={`btn ${
+                  ledState ? "btn-success" : "btn-secondary"
+                } m-2`}
+                onClick={toggleLed}
+              >
+                Luz Sala {ledState ? "Ligada" : "Desligada"}
+              </button>
+              <button
+                className={`btn ${
+                  arState ? "btn-success" : "btn-secondary"
+                } m-2`}
+                onClick={toggleAr}
+              >
+                Ar-condicionado {arState ? "Ligado" : "Desligado"}
+              </button>
+              <button
+                className={`btn ${
+                  umidState ? "btn-success" : "btn-secondary"
+                } m-2`}
+                onClick={toggleUmid}
+              >
+                Umidificador {umidState ? "Ligado" : "Desligado"}
+              </button>
+              <hr />
+              <p>Temperatura: {temperatura} °C</p>
+              <p>Umidade: {umidade} %</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
