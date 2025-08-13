@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import mqtt from "mqtt";
 
 export default function LivingRoom() {
@@ -10,12 +10,10 @@ export default function LivingRoom() {
   const [umidade, setUmidade] = useState("-");
 
   useEffect(() => {
-    // Conexão MQTT via WebSocket
     const mqttClient = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
 
     mqttClient.on("connect", () => {
       console.log("Conectado ao broker MQTT!");
-      // Assinar tópicos da sala
       mqttClient.subscribe("jml/sala/led");
       mqttClient.subscribe("jml/sala/ar");
       mqttClient.subscribe("jml/sala/umid");
@@ -29,74 +27,45 @@ export default function LivingRoom() {
       if (topic === "jml/sala/led") setLedState(msg === "ON");
       if (topic === "jml/sala/ar") setArState(msg === "ON");
       if (topic === "jml/sala/umid") setUmidState(msg === "ON");
+
       if (topic === "jml/sala/dados") {
-        const tempMatch = msg.match(/Temp: ([\d.]+)C/);
-        const umidMatch = msg.match(/Umid: ([\d.]+)%/);
-        if (tempMatch) setTemperatura(tempMatch[1]);
-        if (umidMatch) setUmidade(umidMatch[1]);
+        try {
+          const { temp, hum } = JSON.parse(msg);
+          setTemperatura(temp);
+          setUmidade(hum);
+        } catch (err) {
+          console.error("Erro ao ler dados:", err);
+        }
       }
     });
 
     setClient(mqttClient);
-
     return () => mqttClient.end();
   }, []);
 
-  // Funções de controle
-  const toggleLed = () => {
-    if (!client) return;
-    client.publish("jml/sala/led", ledState ? "OFF" : "ON");
-  };
-
-  const toggleAr = () => {
-    if (!client) return;
-    client.publish("jml/sala/ar", arState ? "OFF" : "ON");
-  };
-
-  const toggleUmid = () => {
-    if (!client) return;
-    client.publish("jml/sala/umid", umidState ? "OFF" : "ON");
-  };
+  // Publicadores
+  const toggleLed = () => client && client.publish("jml/sala/led", ledState ? "OFF" : "ON");
+  const toggleAr = () => client && client.publish("jml/sala/ar", arState ? "OFF" : "ON");
+  const toggleUmid = () => client && client.publish("jml/sala/umid", umidState ? "OFF" : "ON");
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Sala</h1>
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card text-center shadow-lg p-3 mb-5 bg-light rounded">
-            <div className="card-body">
-              <h5 className="card-title">Controles</h5>
-              <button
-                className={`btn ${
-                  ledState ? "btn-success" : "btn-secondary"
-                } m-2`}
-                onClick={toggleLed}
-              >
-                Luz Sala {ledState ? "ON" : "OFF"}
-              </button>
-              <button
-                className={`btn ${
-                  arState ? "btn-success" : "btn-secondary"
-                } m-2`}
-                onClick={toggleAr}
-              >
-                Ar-condicionado {arState ? "ON" : "OFF"}
-              </button>
-              <button
-                className={`btn ${
-                  umidState ? "btn-success" : "btn-secondary"
-                } m-2`}
-                onClick={toggleUmid}
-              >
-                Umidificador {umidState ? "ON" : "OFF"}
-              </button>
-              <hr />
-              <p>Temperatura: {temperatura} °C</p>
-              <p>Umidade: {umidade} %</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="container">
+      <h2>Living Room</h2>
+
+      <p>Temperatura: {temperatura}°C</p>
+      <p>Umidade: {umidade}%</p>
+
+      <button onClick={toggleLed}>
+        {ledState ? "Desligar Luz" : "Ligar Luz"}
+      </button>
+
+      <button onClick={toggleAr}>
+        {arState ? "Desligar Ar" : "Ligar Ar"}
+      </button>
+
+      <button onClick={toggleUmid}>
+        {umidState ? "Desligar Umidificador" : "Ligar Umidificador"}
+      </button>
     </div>
   );
 }
