@@ -30,11 +30,18 @@ export default function LivingRoom({ darkMode }) {
 
       if (topic === "jml/sala/dados") {
         try {
-          const { temp, hum } = JSON.parse(msg);
-          setTemperatura(temp);
-          setUmidade(hum);
-        } catch (err) {
-          console.error("Erro ao ler dados:", err);
+            // Tente fazer o parse como JSON
+          const data = JSON.parse(msg);
+          setTemperatura(data.temp);
+          setUmidade(data.hum);
+        } catch (error) {
+          // Caso não seja JSON, trate como string
+          console.error("Erro ao ler dados:", error);
+          const tempMatch = msg.match(/Temp:\s([\d.]+)C/);
+          const humidMatch = msg.match(/Umid:\s([\d.]+)%/);
+
+          if (tempMatch) setTemperatura(parseFloat(tempMatch[1]));
+          if (humidMatch) setUmidade(parseFloat(humidMatch[1]));
         }
       }
     });
