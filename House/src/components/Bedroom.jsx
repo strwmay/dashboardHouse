@@ -42,7 +42,7 @@ export default function Bedroom({ darkMode }) {
 
 
         <div className="col-md">
-          <h1 className="text-center mb-4">🛏️Quarto</h1>
+          <h1 className="text-center mb-4">Quarto🛏️</h1>
           <div className={`card text-center shadow-lg p-3 mb-5 rounded ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}>
             <div className="card-body">
               <h5 className="card-title">Controles</h5>
