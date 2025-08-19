@@ -55,10 +55,9 @@ export default function LivingRoom({ darkMode }) {
   const toggleUmid = () => client && client.publish("jml/sala/umid", umidState ? "OFF" : "ON");
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Sala🛋️</h1>
-      <div className="row justify-content-center">
-        <div className="col-md-4">
+
+        <div className="col-md">
+          <h1 className="text-center mb-4">Sala🛋️</h1>
           <div className={`card text-center shadow-lg p-3 mb-5 rounded ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}>
             <div className="card-body">
               <h5 className="card-title">Controles</h5>
@@ -92,7 +91,5 @@ export default function LivingRoom({ darkMode }) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 }

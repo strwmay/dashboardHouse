@@ -39,10 +39,10 @@ export default function Bedroom({ darkMode }) {
   const controlCurtain = (action) => client && client.publish("quarto/cortina", action);
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">🛏️Quarto</h1>
-      <div className="row justify-content-center">
-        <div className="col-md-4">
+
+
+        <div className="col-md">
+          <h1 className="text-center mb-4">🛏️Quarto</h1>
           <div className={`card text-center shadow-lg p-3 mb-5 rounded ${darkMode ? "bg-dark text-light" : "bg-light text-dark"}`}>
             <div className="card-body">
               <h5 className="card-title">Controles</h5>
@@ -83,7 +83,5 @@ export default function Bedroom({ darkMode }) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 }
